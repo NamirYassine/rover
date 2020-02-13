@@ -11,13 +11,21 @@ import java.util.List;
 
 public class RoversApplication {
 
-    public static void main(String[] args) throws IOException, CanNotStepException, PointNotInPlateauException, PlateauException {
+    public static void main(String[] args) throws IOException, PointNotInPlateauException, PlateauException {
         RoverFileRider demoFileReader = new RoverFileRider();
         List<Rover> rovers = demoFileReader.readFile(new FileInputStream(args[0]));
 
-        for (Rover rover : rovers) {
-            rover.move();
-            System.out.println(rover.getPosition());
+        for (int i=0; i<rovers.size(); i++) {
+            String msg = "";
+            Rover rover = rovers.get(i);
+            try {
+                rover.move();
+                msg = rover.getPosition().toString();
+            } catch (CanNotStepException e) {
+                msg = "The " + (1+i) + "th rover blocked because can't step out of plateau.";
+            } finally {
+                System.out.println(msg);
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,15 +44,35 @@ public class RoverFileRider {
     }
 
     public Plateau readPlateau(String input) throws PlateauException {
-        return new Plateau(Character.getNumericValue(input.charAt(0)), Character.getNumericValue(input.charAt(1)));
+        int maxX = Character.getNumericValue(input.charAt(0));
+        int maxY = Character.getNumericValue(input.charAt(1));
+        try {
+            return new Plateau(maxX, maxY);
+        } catch (PlateauException e) {
+            throw new PlateauException("The Plateau (" + maxX + "," + maxY + ") must be greater than (" + Plateau.minX + "," + Plateau.minY + ").");
+        }
     }
 
-    public Position readPosition(String input, Plateau plateau) throws PointNotInPlateauException {// a revoir
-        return new Position(new Point(Character.getNumericValue(input.charAt(0)), Character.getNumericValue(input.charAt(1)), plateau), Direction.valueOf(input.charAt(2) + ""));
+    public Position readPosition(String input, Plateau plateau) throws PointNotInPlateauException {
+        int x = Character.getNumericValue(input.charAt(0));
+        int y = Character.getNumericValue(input.charAt(1));
+        char d = input.charAt(2);
+
+        try {
+            return new Position(new Point(x, y, plateau), Direction.valueOf(d + ""));
+        } catch (PointNotInPlateauException e) {
+            throw new PointNotInPlateauException("The point (" + x + "," + y +") can't be in the plateau (" +
+                    Plateau.minX + "-" + plateau.getMaxX()+ "," + Plateau.minY + "-" +plateau.getMaxY() +").");
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Direction : " + d + " is not in : " + Arrays.asList(Direction.values()));
+        }
     }
 
     public List<Move> readMoves(String input) {
-        return input.chars().mapToObj(item -> Move.valueOf((char)item + "")).collect(Collectors.toList());
+        try {
+            return Arrays.stream(input.split("")).map(item -> Move.valueOf(item)).collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Moves : " + input + " must be in : " + Arrays.asList(Move.values()));
+        }
     }
-
 }

@@ -4,8 +4,8 @@ import com.nasa.mars.rover.exception.CanNotStepException;
 import com.nasa.mars.rover.exception.PlateauException;
 import com.nasa.mars.rover.exception.PointNotInPlateauException;
 import com.nasa.mars.rover.model.*;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,9 +24,9 @@ public class RoverTest {
         return new Rover(getPosition(x, y, maxX, maxY, direction), moves);
     }
 
-    @Test(expected = CanNotStepException.class)
-    public void canNotStepException() throws PointNotInPlateauException, PlateauException, CanNotStepException {
-        getRover(Arrays.asList(Move.M, Move.M, Move.M)).move();
+    @Test
+    public void canNotStepException() {
+        Assertions.assertThrows(CanNotStepException.class, () -> getRover(Arrays.asList(Move.M, Move.M, Move.M)).move());
     }
 
     @Test

@@ -12,9 +12,7 @@ import java.util.List;
 public class RoversApplication {
 
     public static void main(String[] args) throws IOException, PointNotInPlateauException, PlateauException {
-        RoverFileRider demoFileReader = new RoverFileRider();
-//        List<Rover> rovers = demoFileReader.readFile(new FileInputStream("/Users/ynamir/Desktop/rovertest2.txt"));
-        List<Rover> rovers = demoFileReader.readFile(new FileInputStream(args[0]));
+        List<Rover> rovers = RoverFileRider.readFile(new FileInputStream(args[0]));
 
         for (int i=0; i<rovers.size(); i++) {
             String msg = "";

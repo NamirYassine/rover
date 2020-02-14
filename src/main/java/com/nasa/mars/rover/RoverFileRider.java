@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class RoverFileRider {
 
-    public List<Rover> readFile(InputStream fileLocation) throws IOException, PointNotInPlateauException, PlateauException {
+    public static List<Rover> readFile(InputStream fileLocation) throws IOException, PointNotInPlateauException, PlateauException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileLocation));
         String fileLine;
         int i = 0;
@@ -24,17 +24,14 @@ public class RoverFileRider {
         List<Rover> rovers = new ArrayList<>();
 
         while ((fileLine = bufferedReader.readLine()) != null) {
+            // to tolerate spaces and Case
             fileLine = fileLine.replaceAll(" ", "").toUpperCase();
 
-            if (i == 0) {
-                plateau = readPlateau(fileLine);
-            } else {
-                if (i % 2 != 0) {
-                    position = readPosition(fileLine, plateau);
-                } else {
-                    rovers.add(new Rover(position, readMoves(fileLine)));
-                    position = null;
-                }
+            switch (getLine(i)) {
+                case PLATEAU: plateau = readPlateau(fileLine); break;
+                case POSITION: position = readPosition(fileLine, plateau); break;
+                case MOVES: rovers.add(new Rover(position, readMoves(fileLine)));
+                    position = null; break;
             }
             i++;
         }
@@ -43,7 +40,20 @@ public class RoverFileRider {
         return rovers;
     }
 
-    public Plateau readPlateau(String input) throws PlateauException {
+    public static Line getLine(int index) {
+        if (index == 0) {
+            // first line is for plateau
+            return Line.PLATEAU;
+        } else if (index % 2 != 0) {
+            // second line for position
+            return Line.POSITION;
+        } else {
+            //last line for moves
+            return Line.MOVES;
+        }
+    }
+
+    public static Plateau readPlateau(String input) throws PlateauException {
         int maxX = Character.getNumericValue(input.charAt(0));
         int maxY = Character.getNumericValue(input.charAt(1));
         try {
@@ -53,7 +63,7 @@ public class RoverFileRider {
         }
     }
 
-    public Position readPosition(String input, Plateau plateau) throws PointNotInPlateauException {
+    public static Position readPosition(String input, Plateau plateau) throws PointNotInPlateauException {
         int x = Character.getNumericValue(input.charAt(0));
         int y = Character.getNumericValue(input.charAt(1));
         char d = input.charAt(2);
@@ -68,7 +78,7 @@ public class RoverFileRider {
         }
     }
 
-    public List<Move> readMoves(String input) {
+    public static List<Move> readMoves(String input) {
         try {
             return Arrays.stream(input.split("")).map(item -> Move.valueOf(item)).collect(Collectors.toList());
         } catch (IllegalArgumentException e) {

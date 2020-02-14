@@ -4,13 +4,13 @@ import com.nasa.mars.rover.exception.PlateauException;
 
 public class Plateau {
 
-    public static final int minX = 0;
-    public static final int minY = 0;
+    public static final int MIN_X = 0;
+    public static final int MIN_Y = 0;
     private final int maxX;
     private final int maxY;
 
     public Plateau(int maxX, int maxY) throws PlateauException {
-        if (maxX < minX || maxY < minY) {
+        if (maxX < MIN_X || maxY < MIN_Y) {
             throw new PlateauException("The x and y must be greater than 0 to create the plateau.");
         }
         this.maxX = maxX;

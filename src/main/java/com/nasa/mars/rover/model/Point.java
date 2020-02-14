@@ -29,6 +29,6 @@ public class Point {
     public String toString() { return x + " " + y; }
 
     private boolean isInPlateau(int x, int y, Plateau plateau) {
-        return x < plateau.minX || y < plateau.minY || x > plateau.getMaxX() || y > plateau.getMaxY();
+        return x < Plateau.MIN_X || y < Plateau.MIN_Y || x > plateau.getMaxX() || y > plateau.getMaxY();
     }
 }

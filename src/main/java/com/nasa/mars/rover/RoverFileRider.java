@@ -25,7 +25,7 @@ public class RoverFileRider {
 
         while ((fileLine = bufferedReader.readLine()) != null) {
             // to tolerate spaces and Case
-            fileLine = fileLine.replaceAll(" ", "").toUpperCase();
+            fileLine = fileLine.replace(" ", "").toUpperCase();
 
             switch (getLine(i)) {
                 case PLATEAU: plateau = readPlateau(fileLine); break;
@@ -59,7 +59,7 @@ public class RoverFileRider {
         try {
             return new Plateau(maxX, maxY);
         } catch (PlateauException e) {
-            throw new PlateauException("The Plateau (" + maxX + "," + maxY + ") must be greater than (" + Plateau.minX + "," + Plateau.minY + ").");
+            throw new PlateauException("The Plateau (" + maxX + "," + maxY + ") must be greater than (" + Plateau.MIN_X + "," + Plateau.MIN_Y + ").");
         }
     }
 
@@ -72,7 +72,7 @@ public class RoverFileRider {
             return new Position(new Point(x, y, plateau), Direction.valueOf(d + ""));
         } catch (PointNotInPlateauException e) {
             throw new PointNotInPlateauException("The point (" + x + "," + y +") can't be in the plateau (" +
-                    Plateau.minX + "-" + plateau.getMaxX()+ "," + Plateau.minY + "-" +plateau.getMaxY() +").");
+                    Plateau.MIN_X + "-" + plateau.getMaxX()+ "," + Plateau.MIN_Y + "-" +plateau.getMaxY() +").");
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Direction : " + d + " is not in : " + Arrays.asList(Direction.values()));
         }
@@ -80,7 +80,7 @@ public class RoverFileRider {
 
     public static List<Move> readMoves(String input) {
         try {
-            return Arrays.stream(input.split("")).map(item -> Move.valueOf(item)).collect(Collectors.toList());
+            return Arrays.stream(input.split("")).map(Move::valueOf).collect(Collectors.toList());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Moves : " + input + " must be in : " + Arrays.asList(Move.values()));
         }

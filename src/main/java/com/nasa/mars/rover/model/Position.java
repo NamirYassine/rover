@@ -28,8 +28,8 @@ public class Position {
     public boolean canStep() {
         return (Direction.N.equals(direction) && point.getY() + 1 <= point.getPlateau().getMaxY()) ||
                 (Direction.E.equals(direction) && point.getX() + 1 <= point.getPlateau().getMaxX()) ||
-                (Direction.S.equals(direction) && point.getY() - 1 >= Plateau.minY) ||
-                (Direction.W.equals(direction) && point.getX() - 1 >= Plateau.minX);
+                (Direction.S.equals(direction) && point.getY() - 1 >= Plateau.MIN_Y) ||
+                (Direction.W.equals(direction) && point.getX() - 1 >= Plateau.MIN_X);
     }
 
     public void step() throws CanNotStepException {
